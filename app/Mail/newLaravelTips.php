@@ -13,12 +13,14 @@ class newLaravelTips extends Mailable
 {
     use Queueable, SerializesModels;
 
+    private $user;
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(\stdClass $user)
     {
-        //
+        $this->user = $user;
     }
 
     /**
@@ -28,6 +30,7 @@ class newLaravelTips extends Mailable
     {
         return new Envelope(
             subject: 'New Laravel Tips',
+            to: [$this->user->name => $this->user->email]
         );
     }
 
@@ -37,7 +40,8 @@ class newLaravelTips extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            markdown: 'mail.newLaravelTips',
+            with: ['user' => $this->user]
         );
     }
 
